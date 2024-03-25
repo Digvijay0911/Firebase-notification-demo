@@ -61,10 +61,77 @@ class _HomeState extends State<Home> {
       },
     );
   }
+
+  // ====================================================================
+  String deviceTokenToSendPushNotification = "";
+
+  Future<void> getDeviceTokenToSendNotification() async {
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+    final token = await _fcm.getToken();
+    deviceTokenToSendPushNotification = token.toString();
+    print("Token Value: $deviceTokenToSendPushNotification");
+  }
+
+//   Step 2. Go to firebase console -> select your project -> go to project settings -> copy server key
+
+// step 3. open postman
+// 	go to Headers section and set Header
+// 	Content-Type -> application/json
+// 	Authorization ->key=AAAAreRA0mw:APA91bGvTRVxEABpWoOr4irshG_MArL1ek9J4LMu9yQOdQsssHCKCX4wuc6dcxb1pNaw4BG5gYgypgUT7jpwdte4_Pa0l7mJ8tsDtZtgQxM-xBZjr8uWtTRe-X5jIRs1IMGvXKBkHez4
+
+// step 4. now you are ready to send notification via postman
+
+// 	1. method post
+// 	2. API Url -> https://fcm.googleapis.com/fcm/send
+// 	3. json Body ->
+// {
+//     "registration_ids": [
+//         "dJVh8FWXQ_2ipxYVpFaXCT:APA91bFyHc6mSyWHMgN7_iVDk5zB1WwB6qKlZGcxIpRBFnnxl4CRRi9qTCD3oLrJU6OY12AGzuM8_XZkEiWuwXUMc8nIlupjfrjIgNdzuhmq3bAOBYdw1z_8nmcSWyFNin24jkfgFTC5"
+//     ],
+//     "notification": {
+//         "body": "New Video has been uploaded",
+//         "title": "Inventorcode",
+//         "android_channel_id": "pushnotificationapp",
+//         "sound": false
+//     }
+// }
+
+// Step 5. If you want to send extra data
+// 	add data key in josn like this
+// 	{
+// 		"notification"{
+// 				}
+// 		"data":{"_id":1}
+
+// 	}
+
+// NOTE-> For single user user  "to":"" or for multipal users use "registration_ids": [] array
+// 	"registration_ids": [
+//         "dJVh8FWXQ_2ipxYVpFaXCT:APA91bFyHc6mSyWHMgN7_iVDk5zB1WwB6qKlZGcxIpRBFnnxl4CRRi9qTCD3oLrJU6OY12AGzuM8_XZkEiWuwXUMc8nIlupjfrjIgNdzuhmq3bAOBYdw1z_8nmcSWyFNin24jkfgFTC5"
+//     ]
+
+// NOTE ->>>>>>>>>>> If you want to send image in notification add "image":"", key in "":{"notification":""},
+
+// {
+//     "registration_ids": [
+//         "dJVh8FWXQ_2ipxYVpFaXCT:APA91bFyHc6mSyWHMgN7_iVDk5zB1WwB6qKlZGcxIpRBFnnxl4CRRi9qTCD3oLrJU6OY12AGzuM8_XZkEiWuwXUMc8nIlupjfrjIgNdzuhmq3bAOBYdw1z_8nmcSWyFNin24jkfgFTC5"
+//     ],
+//     "notification": {
+//         "body": "New Video has been uploaded",
+//         "title": "Inventorcode",
+//         "android_channel_id": "pushnotificationapp",
+//         "image":"https://cdn2.vectorstock.com/i/1000x1000/23/91/small-size-emoticon-vector-9852391.jpg",
+//         "sound": false
+//     }
+
+// }
+
   // ====================================================================
 
   @override
   Widget build(BuildContext context) {
+    getDeviceTokenToSendNotification();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Notification"),
